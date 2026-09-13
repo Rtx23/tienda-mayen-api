@@ -11,8 +11,8 @@ import java.util.List;
 @Service
 public class ProductoService implements ProductoUseCase {
 
+    // Dependencia del repositorio para gestionar los productos.
     private final ProductoRepository productoRepository;
-    
 
     public ProductoService(ProductoRepository productoRepository) {
         this.productoRepository = productoRepository;
@@ -21,6 +21,7 @@ public class ProductoService implements ProductoUseCase {
     @Override
     public Producto crearProducto(Producto producto) {
 
+        // Valida los datos antes de guardar el producto.
         validarProducto(producto);
 
         return productoRepository.guardar(producto);
@@ -34,6 +35,7 @@ public class ProductoService implements ProductoUseCase {
     @Override
     public Producto buscarProductoPorId(Long id) {
 
+        // Lanza una excepción si el producto no existe.
         return productoRepository.buscarPorId(id)
                 .orElseThrow(
                     () -> new ProductoNoEncontradoException(id)
@@ -43,8 +45,10 @@ public class ProductoService implements ProductoUseCase {
     @Override
     public Producto actualizarProducto(Long id, Producto producto) {
 
+        // Verifica que el producto exista antes de actualizarlo.
         buscarProductoPorId(id);
 
+        // Valida los nuevos datos del producto.
         validarProducto(producto);
 
         producto.setId(id);
@@ -55,11 +59,13 @@ public class ProductoService implements ProductoUseCase {
     @Override
     public void eliminarProducto(Long id) {
 
+        // Verifica que exista antes de eliminarlo.
         buscarProductoPorId(id);
 
         productoRepository.eliminar(id);
     }
-    
+
+    // Centraliza las validaciones de los datos del producto.
     private void validarProducto(Producto producto) {
 
         if (producto.getNombre() == null ||
@@ -90,6 +96,7 @@ public class ProductoService implements ProductoUseCase {
                     "La fecha de vencimiento es obligatoria"
             );
         }
+
         if (producto.getStockMinimo() < 0) {
 
             throw new IllegalArgumentException(
@@ -97,14 +104,14 @@ public class ProductoService implements ProductoUseCase {
             );
         }
     }
+
     @Override
     public List<Producto> listarProductosStockBajo() {
-
         return productoRepository.buscarStockBajo();
     }
+
     @Override
     public List<Producto> listarProductosSinStock() {
-
         return productoRepository.buscarSinStock();
     }
 }
