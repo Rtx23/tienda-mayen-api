@@ -12,10 +12,12 @@ import com.tienda.gestion.application.exception.ProductoNoEncontradoException;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    // Maneja las excepciones cuando no se encuentra un producto.
     @ExceptionHandler(ProductoNoEncontradoException.class)
     public ResponseEntity<ErrorResponse> manejarProductoNoEncontrado(
             ProductoNoEncontradoException ex) {
 
+        // Construye una respuesta con código HTTP 404.
         ErrorResponse error = new ErrorResponse(
                 LocalDateTime.now(),
                 HttpStatus.NOT_FOUND.value(),
@@ -27,10 +29,13 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.NOT_FOUND)
                 .body(error);
     }
+
+    // Maneja errores producidos por datos inválidos.
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorResponse> manejarDatosInvalidos(
             IllegalArgumentException ex) {
 
+        // Construye una respuesta con código HTTP 400.
         ErrorResponse error = new ErrorResponse(
                 LocalDateTime.now(),
                 HttpStatus.BAD_REQUEST.value(),
