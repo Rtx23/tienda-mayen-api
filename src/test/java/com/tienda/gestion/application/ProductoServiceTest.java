@@ -16,20 +16,23 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
+
 @ExtendWith(MockitoExtension.class)
 class ProductoServiceTest {
 
+    // Simula el repositorio para probar el servicio de forma aislada.
     @Mock
     private ProductoRepository productoRepository;
 
+    // Inyecta el repositorio simulado en el servicio.
     @InjectMocks
     private ProductoService productoService;
 
+    // Verifica que un producto válido pueda ser creado correctamente.
     @Test
     void crearProducto_debeGuardarProducto() {
 
@@ -52,6 +55,7 @@ class ProductoServiceTest {
         verify(productoRepository).guardar(producto);
     }
 
+    // Verifica que se pueda encontrar un producto existente por su ID.
     @Test
     void buscarProductoPorId_cuandoExiste_debeRetornarProducto() {
 
@@ -72,6 +76,8 @@ class ProductoServiceTest {
 
         verify(productoRepository).buscarPorId(1L);
     }
+
+    // Verifica que se lance una excepción cuando el producto no existe.
     @Test
     void buscarProductoPorId_cuandoNoExiste_debeLanzarExcepcion() {
 
@@ -83,6 +89,8 @@ class ProductoServiceTest {
                 () -> productoService.buscarProductoPorId(999L)
         );
     }
+
+    // Verifica que no se permita crear productos con precio negativo.
     @Test
     void crearProducto_conPrecioNegativo_debeLanzarExcepcion() {
 
@@ -101,6 +109,8 @@ class ProductoServiceTest {
                 () -> productoService.crearProducto(productoInvalido)
         );
     }
+
+    // Verifica que se obtengan correctamente los productos con stock bajo.
     @Test
     void listarProductosStockBajo_debeRetornarProductos() {
 
@@ -128,6 +138,8 @@ class ProductoServiceTest {
                 resultado.get(0).getNombre()
         );
     }
+
+    // Verifica que se obtengan correctamente los productos sin stock.
     @Test
     void listarProductosSinStock_debeRetornarProductosAgotados() {
 
