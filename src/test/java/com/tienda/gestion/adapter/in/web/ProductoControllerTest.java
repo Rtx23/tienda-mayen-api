@@ -10,7 +10,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -24,6 +23,7 @@ class ProductoControllerTest {
 
     private MockMvc mockMvc;
 
+    // Simula el caso de uso para probar el controlador de forma aislada.
     @Mock
     private ProductoUseCase productoUseCase;
 
@@ -34,11 +34,13 @@ class ProductoControllerTest {
         ProductoController controller =
                 new ProductoController(productoUseCase);
 
+        // Configura MockMvc para realizar pruebas sobre el controlador.
         mockMvc = MockMvcBuilders
                 .standaloneSetup(controller)
                 .build();
     }
 
+    // Verifica que la creación de un producto retorne HTTP 201.
     @Test
     void crearProducto_debeRetornar201() throws Exception {
 
@@ -71,6 +73,7 @@ class ProductoControllerTest {
         .andExpect(jsonPath("$.nombre").value("Inca Kola"));
     }
 
+    // Verifica que la búsqueda de un producto inexistente retorne HTTP 404.
     @Test
     void buscarProductoInexistente_debeRetornar404() throws Exception {
 
@@ -82,6 +85,8 @@ class ProductoControllerTest {
         )
         .andExpect(status().isNotFound());
     }
+
+    // Verifica que la consulta de productos con stock bajo retorne HTTP 200.
     @Test
     void stockBajo_debeRetornar200() throws Exception {
 
@@ -95,6 +100,8 @@ class ProductoControllerTest {
                 status().isOk()
         );
     }
+
+    // Verifica que la consulta de productos sin stock retorne HTTP 200.
     @Test
     void sinStock_debeRetornar200() throws Exception {
 
@@ -109,4 +116,3 @@ class ProductoControllerTest {
         );
     }
 }
-
