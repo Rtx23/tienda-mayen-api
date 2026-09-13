@@ -2,6 +2,7 @@ package com.tienda.gestion.domain.model;
 
 import java.time.LocalDate;
 
+
 public class Producto {
 
     private Long id;
@@ -9,6 +10,8 @@ public class Producto {
     private double precio;
     private int stock;
     private LocalDate fechaVencimiento;
+
+    // Define la cantidad mínima de stock permitida.
     private int stockMinimo;
 
     public Producto() {
@@ -53,6 +56,7 @@ public class Producto {
     public void setFechaVencimiento(LocalDate fechaVencimiento) {
         this.fechaVencimiento = fechaVencimiento;
     }
+
     public int getStockMinimo() {
         return stockMinimo;
     }
