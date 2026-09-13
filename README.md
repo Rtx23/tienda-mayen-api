@@ -282,7 +282,7 @@ Caso utilizado para la demostración:
 
 ## 12. Postman
 
-La colección debe guardar al menos estos casos:
+La colección debe guardar  estos casos:
 
 ```text
 Productos
@@ -361,3 +361,5 @@ Integración + pruebas + despliegue
 **Curso:** Desarrollo Web Integrado  
 **Proyecto:** Sistema de Gestión - Tienda MAYEN  
 **Año:** 2026
+## Funcionalidades
+
