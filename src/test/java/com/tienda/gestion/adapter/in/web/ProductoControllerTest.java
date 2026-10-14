@@ -1,3 +1,4 @@
+```java
 package com.tienda.gestion.adapter.in.web;
 
 import com.tienda.gestion.application.port.in.ProductoUseCase;
@@ -10,7 +11,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -20,13 +20,16 @@ import java.util.List;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
+// Pruebas para comprobar las respuestas del controlador de productos.
 class ProductoControllerTest {
 
     private MockMvc mockMvc;
 
+    // Simula las operaciones del servicio de productos.
     @Mock
     private ProductoUseCase productoUseCase;
 
+    // Prepara el controlador antes de cada prueba.
     @BeforeEach
     void configurar() {
         MockitoAnnotations.openMocks(this);
@@ -40,6 +43,7 @@ class ProductoControllerTest {
                 .build();
     }
 
+    // Comprueba que un producto se cree correctamente.
     @Test
     void crearProducto_debeRetornar201() throws Exception {
 
@@ -49,6 +53,7 @@ class ProductoControllerTest {
         producto.setPrecio(3.50);
         producto.setStock(20);
 
+        // Define el producto que devolverá el servicio simulado.
         when(productoUseCase.crearProducto(org.mockito.ArgumentMatchers.any(Producto.class)))
                 .thenReturn(producto);
 
@@ -73,6 +78,7 @@ class ProductoControllerTest {
         .andExpect(jsonPath("$.nombre").value("Inca Kola"));
     }
 
+    // Comprueba que se devuelva 404 si el producto no existe.
     @Test
     void buscarProductoInexistente_debeRetornar404() throws Exception {
 
@@ -84,6 +90,8 @@ class ProductoControllerTest {
         )
         .andExpect(status().isNotFound());
     }
+
+    // Comprueba que la consulta de productos con stock bajo responda correctamente.
     @Test
     void stockBajo_debeRetornar200() throws Exception {
 
@@ -97,6 +105,8 @@ class ProductoControllerTest {
                 status().isOk()
         );
     }
+
+    // Comprueba que la consulta de productos agotados responda correctamente.
     @Test
     void sinStock_debeRetornar200() throws Exception {
 
@@ -111,4 +121,4 @@ class ProductoControllerTest {
         );
     }
 }
-
+```
