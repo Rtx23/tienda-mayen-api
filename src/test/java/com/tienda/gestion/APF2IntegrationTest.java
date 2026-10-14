@@ -180,4 +180,10 @@ class APF2IntegrationTest {
         mvc.perform(post("/api/ventas").header("Authorization", "Bearer " + admin).contentType(MediaType.APPLICATION_JSON).content(venta(id, 0))).andExpect(status().isBadRequest());
         assertEquals(10, stock(id));
     }
+    @Test void consultarProductoInexistenteDevuelve404() throws Exception {
+        mvc.perform(get("/api/productos/999999999")
+        .header("Authorization", "Bearer " + admin))
+        .andExpect(status().isNotFound());
+    }
 }
+
