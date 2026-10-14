@@ -1,5 +1,6 @@
 package com.tienda.gestion;
 
+// Pruebas completas: se conservan las aserciones de persistencia, JWT y rollback.
 import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
