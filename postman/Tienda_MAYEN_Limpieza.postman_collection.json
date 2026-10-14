@@ -1,0 +1,127 @@
+{
+  "info": {
+    "name": "Tienda MAYEN - Limpieza de datos comerciales v2",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Al enviar DELETE elimina TODOS los productos, ventas y detalles. Conserva todos los usuarios, contraseñas, roles y estado. Obtiene JWT admin automáticamente. La confirmación del backend se envía fija: no hace falta editar confirmarEliminacion. Solo importar no elimina datos. Reiniciar gestion con la ruta nueva antes de usar."
+  },
+  "variable": [
+    {
+      "value": "http://localhost:8080",
+      "type": "string",
+      "key": "baseUrl"
+    },
+    {
+      "value": "admin123",
+      "type": "string",
+      "key": "adminPassword"
+    },
+    {
+      "value": "",
+      "type": "string",
+      "key": "adminToken"
+    }
+  ],
+  "item": [
+    {
+      "name": "01 Login admin",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.collectionVariables.set(\"adminToken\", \"\");",
+              "pm.variables.set(\"adminToken\", \"\");"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Login correcto\", () => pm.response.to.have.status(200));",
+              "if (pm.response.code === 200) { const r = pm.response.json(); if (r.accessToken && Array.isArray(r.roles) && r.roles.includes(\"ADMIN\")) { pm.collectionVariables.set(\"adminToken\", r.accessToken); pm.variables.set(\"adminToken\", r.accessToken); } }"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "auth": {
+          "type": "noauth"
+        },
+        "body": {
+          "raw": "{\"username\":\"admin\",\"password\":\"{{adminPassword}}\"}",
+          "mode": "raw",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": "{{baseUrl}}/api/auth/login",
+        "header": [
+          {
+            "value": "application/json",
+            "key": "Content-Type"
+          }
+        ]
+      }
+    },
+    {
+      "name": "02 Eliminar todos los productos ventas y detalles - conservar usuarios",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const baseUrl = String(pm.collectionVariables.get(\"baseUrl\") || \"http://localhost:8080\").replace(/\\/$/, \"\");",
+              "pm.variables.set(\"baseUrl\", baseUrl);",
+              "pm.variables.set(\"adminToken\", \"\");",
+              "pm.sendRequest({ url: baseUrl + \"/api/auth/login\", method: \"POST\", header: { \"Content-Type\": \"application/json\" }, body: { mode: \"raw\", raw: JSON.stringify({ username: \"admin\", password: pm.collectionVariables.get(\"adminPassword\") || \"admin123\" }) } }, (err, response) => {",
+              "  if (err || !response || response.code !== 200) { pm.execution.skipRequest(); console.error(\"No se envió la limpieza: login admin falló. Revisar baseUrl y adminPassword.\"); return; }",
+              "  let data; try { data = response.json(); } catch (e) { pm.execution.skipRequest(); console.error(\"Login no devolvió JSON válido.\"); return; }",
+              "  if (!data.accessToken || !Array.isArray(data.roles) || !data.roles.includes(\"ADMIN\")) { pm.execution.skipRequest(); console.error(\"Login no devolvió token con rol ADMIN.\"); return; }",
+              "  pm.collectionVariables.set(\"adminToken\", data.accessToken);",
+              "  pm.variables.set(\"adminToken\", data.accessToken);",
+              "});"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Limpieza correcta\", () => pm.response.to.have.status(200));",
+              "if (pm.response.code === 200) { const r = pm.response.json(); pm.test(\"Usuarios y autorización conservados\", () => pm.expect(r.usuariosConservados).to.eql(true)); [\"detallesEliminados\", \"ventasEliminadas\", \"productosEliminados\"].forEach(k => pm.test(k + \" es un conteo válido\", () => { pm.expect(r[k]).to.be.a(\"number\"); pm.expect(r[k]).to.be.at.least(0); })); }"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "value": "{{adminToken}}",
+              "type": "string",
+              "key": "token"
+            }
+          ]
+        },
+        "url": "{{baseUrl}}/api/admin/datos-comerciales",
+        "header": [
+          {
+            "value": "ELIMINAR_DATOS_COMERCIALES",
+            "key": "X-Confirmar-Eliminacion"
+          }
+        ],
+        "description": "DELETE transaccional exclusivo ADMIN. Conserva la tabla usuarios completa. No reinicia identificadores. Devuelve 200 con detallesEliminados, ventasEliminadas, productosEliminados y usuariosConservados=true."
+      }
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "nombre": "Tienda MAYEN - Eliminar datos comerciales y conservar autorización",
+  "formato": "Procedimiento SQL para PostgreSQL; no es una colección Postman",
+  "base_de_datos": "tienda_mayenm",
+  "tablas_a_vaciar": [
+    "public.detalles_venta",
+    "public.ventas",
+    "public.productos"
+  ],
+  "tablas_conservadas": [
+    "public.usuarios"
+  ],
+  "autorizacion_conservada": [
+    "usuarios",
+    "hashes de contraseñas",
+    "roles",
+    "estado habilitado"
+  ],
+  "reinicia_identificadores": false,
+  "ejecutado": false,
+  "instrucciones": [
+    "Abrir pgAdmin y seleccionar tienda_mayenm.",
+    "Abrir Query Tool.",
+    "Abrir el archivo SQL adjunto o copiar el campo sql de este JSON como texto SQL.",
+    "Ejecutar el bloque completo. No ejecutar el JSON directamente.",
+    "Comprobar que productos, ventas y detalles_venta tienen cero registros y que usuarios conserva sus registros."
+  ],
+  "limitacion_postman": "La API no expone DELETE para ventas. Este JSON no puede importarse como colección ejecutable en Postman. No se modificó el backend.",
+  "sql": "-- Tienda MAYEN: eliminar datos comerciales y conservar autorización.\n-- Ejecutar en Query Tool de pgAdmin conectado a tienda_mayenm.\n-- Elimina todas las filas de estas tres tablas; no elimina usuarios ni roles.\nBEGIN;\nDO $$\nBEGIN\n    IF current_database() <> 'tienda_mayenm' THEN\n        RAISE EXCEPTION 'Base incorrecta: conectar a tienda_mayenm';\n    END IF;\nEND\n$$;\nLOCK TABLE public.detalles_venta, public.ventas, public.productos IN ACCESS EXCLUSIVE MODE;\nDELETE FROM public.detalles_venta;\nDELETE FROM public.ventas;\nDELETE FROM public.productos;\nCOMMIT;\n\nSELECT 'productos' AS tabla, COUNT(*) AS registros FROM public.productos\nUNION ALL SELECT 'ventas', COUNT(*) FROM public.ventas\nUNION ALL SELECT 'detalles_venta', COUNT(*) FROM public.detalles_venta\nUNION ALL SELECT 'usuarios conservados', COUNT(*) FROM public.usuarios;"
+}
