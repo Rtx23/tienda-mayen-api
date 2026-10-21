@@ -1,0 +1,20 @@
+import { existsSync, mkdirSync, readdirSync, copyFileSync, writeFileSync, readFileSync, cpSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { resolve, dirname, relative } from 'node:path';
+const project=resolve(dirname(fileURLToPath(import.meta.url)),'../..');
+const source=resolve(project,'frontend/dist/mayen/browser');
+const target=resolve(project,'src/main/resources/static');
+const bundles=resolve(target,'assets/angular');
+if(!existsSync(resolve(source,'index.html')))throw new Error('Primero ejecutar npm run build.');
+mkdirSync(bundles,{recursive:true});
+cpSync(resolve(project,'frontend/public/assets/images'),resolve(target,'assets/images'),{recursive:true});
+copyFileSync(resolve(project,'frontend/public/assets/logo.svg'),resolve(target,'assets/logo.svg'));
+if(existsSync(resolve(project,'frontend/dist/mayen/3rdpartylicenses.txt')))copyFileSync(resolve(project,'frontend/dist/mayen/3rdpartylicenses.txt'),resolve(bundles,'3rdpartylicenses.txt'));
+const entries=readdirSync(source).filter(f=>/\.(js|css|map)$/.test(f));
+for(const name of entries)copyFileSync(resolve(source,name),resolve(bundles,name));
+let html=readFileSync(resolve(source,'index.html'),'utf8');
+for(const name of entries)html=html.replaceAll('"'+name+'"','"/assets/angular/'+name+'"');
+writeFileSync(resolve(target,'index.html'),html);
+writeFileSync(resolve(bundles,'manifest.json'),JSON.stringify({framework:'Angular',bundles:entries},null,2));
+console.log('Angular publicado en '+relative(project,target)+'. Reiniciar gestion para abrirlo en el puerto 8080.');
+

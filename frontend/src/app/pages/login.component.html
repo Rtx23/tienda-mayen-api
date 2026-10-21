@@ -1,0 +1,9 @@
+<div class="login-layout">
+<section class="login-photo"><img src="/assets/images/bienvenida.png" alt="Tienda de abarrotes organizada">
+<a class="brand photo-brand" href="#/login"><img src="/assets/logo.svg" alt=""><span>MAYEN<small>Tu tienda, en orden.</small></span></a>
+<div class="photo-copy"><span class="eyebrow">GESTIÓN DE TIENDA</span><h1>Más cerca de tu negocio.</h1><p>Productos, inventario y ventas.<br>Todo en un solo lugar.</p></div><span class="photo-footer">Tienda MAYEN · Arequipa, Perú</span></section>
+<main class="login-panel"><div class="login-box"><span class="eyebrow">BIENVENIDO A MAYEN</span><h2>Tu día empieza aquí.</h2><p class="muted">Inicia sesión para gestionar tu tienda.</p>
+<form id="login-form" #form="ngForm" (ngSubmit)="login()"><label for="username">Usuario</label><input id="username" name="username" [(ngModel)]="username" autocomplete="username" required maxlength="60" placeholder="Tu nombre de usuario">
+<label for="password">Contraseña</label><div class="password-field"><input id="password" name="password" [(ngModel)]="password" [type]="visible()?'text':'password'" autocomplete="current-password" required maxlength="72" placeholder="Tu contraseña"><button type="button" (click)="visible.set(!visible())" [attr.aria-label]="visible()?'Ocultar contraseña':'Mostrar contraseña'">{{visible()?'Ocultar':'Ver'}}</button></div>
+@if(error()){<p class="form-error" role="alert">{{error()}}</p>}<button class="btn primary wide" type="submit" [disabled]="form.invalid||busy()">{{busy()?'Ingresando…':'Iniciar sesión'}} <span>→</span></button></form>
+<p class="login-footnote">Accede con la cuenta asignada a tu rol.</p></div><div class="login-bottom">Inventario claro. Ventas al día.</div></main></div>

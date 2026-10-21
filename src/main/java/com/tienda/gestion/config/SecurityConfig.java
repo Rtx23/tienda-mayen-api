@@ -87,6 +87,7 @@ public class SecurityConfig {
 
             // Permite o restringe las operaciones según el rol del usuario.
             .authorizeHttpRequests(a -> a
+                .requestMatchers(HttpMethod.GET, "/", "/index.html", "/assets/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/public/ping").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/productos", "/api/productos/**").hasAnyRole("LECTOR", "EDITOR", "ADMIN")

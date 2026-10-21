@@ -1,0 +1,13 @@
+<section class="page-banner"><img src="/assets/images/catalogo-banner.png" alt="" fetchpriority="low"><div><span class="eyebrow">TIENDA MAYEN</span><h2>Tu negocio, a la vista</h2><p>Productos, existencias y resultados en un mismo lugar.</p></div></section>
+<div class="page-heading"><div><span class="eyebrow">TU TIENDA, AL DÍA</span><h1>Hola, {{auth.session()?.username}}.</h1><p>Un vistazo a cómo va tu tienda hoy.</p></div>@if(auth.canSell()){<a class="btn primary" routerLink="/nueva-venta">＋ Registrar venta</a>}</div>
+<section class="metrics" aria-label="Indicadores de tienda">
+<article class="metric"><div class="metric-top">Productos<span class="metric-icon">▦</span></div><strong>{{store.products().length}}</strong><small>En tu catálogo</small></article>
+<article class="metric"><div class="metric-top">Stock bajo<span class="metric-icon">↓</span></div><strong>{{low().length}}</strong><small>En el mínimo o por debajo</small></article>
+<article class="metric"><div class="metric-top">Sin existencias<span class="metric-icon">○</span></div><strong>{{zero().length}}</strong><small>Necesitan reposición</small></article>
+<article class="metric"><div class="metric-top">{{auth.canSell()?'Ventas acumuladas':'Valor de inventario'}}<span class="metric-icon">↗</span></div><strong>{{money(auth.canSell()?sold():inventory())}}</strong><small>{{auth.canSell()?store.sales().length+' ventas registradas':'Precio actual × stock'}}</small></article></section>
+@if(auth.canSell()){<app-sales-analytics />}
+<section class="panel"><div class="panel-head"><h2>Necesitan reposición</h2><a routerLink="/productos" [queryParams]="{filtro:'bajo'}">Ver productos →</a></div>
+@for(p of low().slice(0,4);track p.id){<div class="mini-product"><img [src]="image(p.nombre)" alt=""><div><strong>{{p.nombre}}</strong><small>{{p.stock}} unidades · mínimo {{p.stockMinimo}}</small></div><span class="badge" [class]=" 'badge '+status(p)">{{label(p)}}</span></div>}
+@empty{<div class="empty"><strong>Inventario en orden</strong>No hay productos con stock bajo.</div>}</section>
+@if(auth.canSell()){<section class="panel table-panel"><div class="panel-head"><h2>Últimas ventas</h2><a routerLink="/ventas">Ver historial →</a></div><div class="table-wrap"><table><thead><tr><th>VENTA</th><th>FECHA</th><th>REGISTRADA POR</th><th>TOTAL</th></tr></thead><tbody>@for(s of store.sales().slice(0,4);track s.id){<tr><td>#{{s.id}}</td><td>{{date(s.fecha,true)}}</td><td>{{s.usuario}}</td><td>{{money(s.total)}}</td></tr>}</tbody></table></div>@if(!store.sales().length){<div class="empty">Todavía no hay ventas.</div>}</section>}
+

@@ -1,0 +1,9 @@
+<div class="app-layout">
+<aside class="sidebar"><a class="brand" routerLink="/inicio"><img src="/assets/logo.svg" alt=""><span>MAYEN<small>Gestión de tienda</small></span></a><span class="nav-label">MI TIENDA</span>
+<nav aria-label="Navegación principal"><a routerLink="/inicio" routerLinkActive="active"><span>◫</span>Resumen</a><a routerLink="/productos" routerLinkActive="active"><span>▦</span>Productos</a>
+@if(auth.canSell()){<a routerLink="/nueva-venta" routerLinkActive="active"><span>＋</span>Nueva venta</a><a routerLink="/ventas" routerLinkActive="active"><span>≡</span>Historial de ventas</a>}</nav>
+<div class="sidebar-note"><img src="/assets/images/bolsa.svg" alt=""><strong>Una tienda bien organizada</strong><p>Conoce tus existencias y toma mejores decisiones.</p></div>
+<div class="account"><span class="avatar">{{auth.session()?.username?.slice(0,1)?.toUpperCase()}}</span><div><strong>{{auth.session()?.username}}</strong><small>{{auth.session()?.roles?.join(' · ')}}</small></div><button (click)="logout()" title="Cerrar sesión" aria-label="Cerrar sesión">↪</button></div></aside>
+<div class="workspace"><header class="topbar"><span>Tienda MAYEN <span class="separator">/</span><strong>{{title()}}</strong></span><div><span id="today">{{today}}</span><button class="icon-button" (click)="store.refresh()" [disabled]="store.loading()" aria-label="Actualizar datos">↻</button></div></header>
+<main>@if(store.error()){<div class="form-error" role="alert">{{store.error()}} <button class="btn" (click)="store.refresh()">Volver a intentar</button></div>}@if(store.loading()){<p class="muted" role="status">Actualizando datos de tu tienda…</p>}<router-outlet /></main>
+<footer class="app-footer">Tienda MAYEN<span>Gestión de productos y ventas</span></footer></div></div>
