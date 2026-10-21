@@ -109,7 +109,9 @@ class APF2IntegrationTest {
                 .andExpect(status().isCreated()).andExpect(jsonPath("$.total").value(7.0))
                 .andExpect(jsonPath("$.usuario").value("editor")).andExpect(jsonPath("$.detalles[0].cantidad").value(2));
         assertEquals(8, stock(id)); assertEquals(1, jdbc.queryForObject("select count(*) from detalles_venta", Integer.class));
-        mvc.perform(get("/api/ventas").header("Authorization", "Bearer " + admin)).andExpect(status().isOk()).andExpect(jsonPath("$.length()").value(1));
+        mvc.perform(get("/api/ventas").header("Authorization", "Bearer " + admin)).andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(1))
+                .andExpect(jsonPath("$[0].detalles[0].productoId").value(id));
         mvc.perform(get("/api/ventas").header("Authorization", "Bearer " + login("lector"))).andExpect(status().isForbidden());
         mvc.perform(post("/api/ventas").header("Authorization", "Bearer " + login("lector"))
                 .contentType(MediaType.APPLICATION_JSON).content(venta(id, 1))).andExpect(status().isForbidden());

@@ -23,5 +23,5 @@ public class DetalleVentaEntity {
     @Column(nullable = false, precision = 24, scale = 2)
     BigDecimal subtotal;
     protected DetalleVentaEntity() {}
-    Venta.Detalle dominio() { return new Venta.Detalle(producto.id, nombreProducto, cantidad, precioUnitario, subtotal); }
+    Venta.Detalle dominio() { return new Venta.Detalle(producto.getId(), nombreProducto, cantidad, precioUnitario, subtotal); }
 }

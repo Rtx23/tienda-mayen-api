@@ -23,6 +23,9 @@ public class ProductoEntity {
 
     protected ProductoEntity() {}
 
+    // El acceso por método permite obtener el identificador de un proxy LAZY de Hibernate.
+    public Long getId() { return id; }
+
     void aplicar(Producto p) {
         nombre = p.getNombre();
         precio = BigDecimal.valueOf(p.getPrecio());
