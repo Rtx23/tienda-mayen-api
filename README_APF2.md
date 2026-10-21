@@ -1,5 +1,9 @@
 # Tienda MAYEN — Avance de Proyecto 2
 
+Ya existe una interfaz Angular integrada en `/`, con pantallas
+según el rol y recursos visuales incluidos. Ver [INTERFAZ_WEB.md](INTERFAZ_WEB.md).
+El código Angular está en `frontend`; su versión compilada se sirve desde Spring Boot.
+
 El mismo backend del APF1 ahora guarda productos, usuarios y ventas en una base relacional y protege la API con JWT. Se conservan el proyecto Eclipse `gestion`, los endpoints de productos y la arquitectura hexagonal.
 
 Para cargar datos de tienda, importar `postman/Tienda_MAYEN_Datos.postman_collection.json`: incluye 12 productos, cinco ventas, login automático y reutilización de productos existentes. Ver [cómo cargar datos y retirar registros Demo](postman/COMO_CARGAR_DATOS.md). La colección APF2 separada verifica errores intencionales; sus solicitudes indican el código HTTP esperado.

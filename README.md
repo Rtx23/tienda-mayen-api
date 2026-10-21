@@ -1,6 +1,10 @@
 # Tienda MAYEN - API de Gestión de Productos
 
-> **Entrega vigente: APF2.** Consultar [README_APF2.md](README_APF2.md) para ejecución, base de datos, JWT, roles, ventas, pruebas y Postman. El contenido que sigue conserva la documentación histórica del APF1; el almacenamiento actual utiliza JPA/Hibernate.
+La interfaz web integrada se abre en `http://localhost:8080/` después de iniciar
+`gestion`. Incluye login, catálogo, inventario, ventas e historial según el rol.
+Consultar [INTERFAZ_WEB.md](INTERFAZ_WEB.md) para pantallas, permisos e imágenes locales.
+
+> **Entrega vigente: APF3.** Consultar [APF3.md](APF3.md) para el frontend, checklist y validación. El backend de APF2 se documenta en [README_APF2.md](README_APF2.md) para ejecución, base de datos, JWT, roles, ventas, pruebas y Postman. El contenido que sigue conserva la documentación histórica del APF1; el almacenamiento actual utiliza JPA/Hibernate.
 
 > Proyecto académico del curso **Desarrollo Web Integrado** - APF1  
 > Backend con **Spring Boot + API REST + Arquitectura Hexagonal + TDD**
