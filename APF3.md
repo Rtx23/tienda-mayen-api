@@ -32,7 +32,7 @@ Para modificar el frontend: usar Node 24, ejecutar `npm ci`, `npm test` y `npm r
 
 Con Java 21: `./mvnw.cmd package` desde la raíz del proyecto. Las pruebas de integración Maven usan H2 aislada; la revisión del navegador se realizó además contra PostgreSQL, en un esquema separado de los datos habituales.
 
-La revisión del navegador incluyó login incorrecto/correcto, validaciones, creación y edición de producto, cantidad superior al stock, venta, detalle, stock final, filtros del gráfico, cierre de sesión y permisos de lector y editor. La eliminación se comprobó por API sobre un producto temporal. No se confirmó una eliminación en el navegador.
+La revisión del navegador incluyó login incorrecto/correcto, validaciones, creación y edición de producto, cantidad superior al stock, venta, detalle, stock final, filtros del gráfico, cierre de sesión y permisos de lector y editor. La revisión del 17/11/2026 completó también la eliminación desde Angular con un producto temporal y confirmación del usuario.
 
 Se corrigió la lectura del identificador del producto en detalles de venta: el acceso mediante getter funciona con los proxies LAZY de Hibernate. El test de integración comprueba el identificador al recuperar las ventas.
 
@@ -41,3 +41,7 @@ Las capturas, registros de ejecución y comprobaciones SQL locales se conservan 
 ## Trabajo posterior
 
 El registro de gastos queda para una ampliación futura y no se implementa en este avance.
+
+## Verificación del 17/11/2026
+
+37 pruebas Java y 14 de frontend correctas; compilación Angular y empaquetado Maven completados. Se verificó el flujo Angular → Spring Boot → PostgreSQL con datos aislados y el CRUD completo desde las pantallas. El login muestra un aviso cuando vence o se invalida la sesión. Los fallos pendientes de una sesión anterior ya no contaminan la siguiente.
