@@ -5,11 +5,11 @@ import { AuthService } from './auth.service';
 export const authInterceptor:HttpInterceptorFn=(request,next)=>{
   const auth=inject(AuthService); const protectedApi=request.url.startsWith('/api/') && request.url!=='/api/auth/login';
   if(protectedApi && auth.session()){
-    if(!auth.active()){auth.logout();return throwError(()=>new Error('Tu sesión venció.'));}
+    if(!auth.active()){auth.logout('Tu sesión venció. Inicia sesión nuevamente.');return throwError(()=>new Error('Tu sesión venció.'));}
     request=request.clone({setHeaders:{Authorization:'Bearer '+auth.session()!.accessToken}});
   }
   return next(request).pipe(catchError(error=>{
-    if(protectedApi && error instanceof HttpErrorResponse && error.status===401)auth.logout();
+    if(protectedApi && error instanceof HttpErrorResponse && error.status===401)auth.logout('La sesión venció o dejó de ser válida. Inicia sesión nuevamente.');
     return throwError(()=>error);
   }));
 };

@@ -6,6 +6,7 @@ import { Session } from './models';
 @Injectable({providedIn:'root'})
 export class AuthService {
   private http=inject(HttpClient); private router=inject(Router);
+  sessionNotice=signal('');
   session=signal<Session|null>(this.restore());
   private restore():Session|null {
     try { const s=JSON.parse(sessionStorage.getItem('mayen-session')||'null'); return s?.accessToken && Array.isArray(s.roles) && s.expiresAt>Date.now()?s:null; } catch { return null; }
@@ -18,7 +19,8 @@ export class AuthService {
     if(!s.accessToken || !Array.isArray(s.roles))throw new Error('No se recibió una sesión válida.');
     const session={...s,expiresAt:Date.now()+s.expiresIn*1000}; this.session.set(session);
     sessionStorage.setItem('mayen-session',JSON.stringify(session));
+    this.sessionNotice.set('');
   }
-  logout(){ this.session.set(null);sessionStorage.removeItem('mayen-session');void this.router.navigateByUrl('/login'); }
+  logout(reason=''){ this.sessionNotice.set(reason);this.session.set(null);sessionStorage.removeItem('mayen-session');void this.router.navigateByUrl('/login'); }
 }
 
