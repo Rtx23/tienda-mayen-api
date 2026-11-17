@@ -70,3 +70,15 @@ test('errores HTTP explican el problema y conservan el detalle del servidor',()=
  for(const status of [0,400,401,403,404,409])assert.ok(errorMessage({status}).length>15);
  assert.equal(errorMessage({status:409,error:{mensaje:'Stock insuficiente'}}),'Stock insuficiente');
 });
+test('401 deja un aviso visible para volver a iniciar sesión',async()=>{
+ const {auth,injector}=setup();await auth.login('admin','fixture');
+ const request={url:'/api/productos',clone:()=>({url:'/api/productos'})};
+ runInInjectionContext(injector,()=>authInterceptor(request,()=>throwError(()=>new HttpErrorResponse({status:401})))).subscribe({error:()=>{}});
+ assert.equal(auth.active(),false);assert.match(auth.sessionNotice(),/Inicia sesión nuevamente/);
+ await auth.login('admin','fixture');assert.equal(auth.sessionNotice(),'');
+});
+test('un fallo pendiente de otra sesión no contamina la sesión nueva',async()=>{
+ const {Subject}=await import('rxjs');const delayed=new Subject();
+ const {auth,store}=setup('LECTOR',{get:()=>delayed});await auth.login('lector','fixture');const pending=store.refresh();
+ auth.logout();delayed.error(new HttpErrorResponse({status:403}));await pending;assert.equal(store.error(),'');
+});
