@@ -14,7 +14,7 @@ export class StoreService {
     try{
       const result=await firstValueFrom(forkJoin({products:this.http.get<Producto[]>('/api/productos'),sales:this.auth.canSell()?this.http.get<Venta[]>('/api/ventas'):of([] as Venta[])}));
       if(token===this.auth.session()?.accessToken){this.products.set(result.products);this.sales.set(result.sales.sort((a,b)=>b.id-a.id));}
-    }catch(e){this.error.set(errorMessage(e));}finally{this.loading.set(false);}
+    }catch(e){if(token===this.auth.session()?.accessToken)this.error.set(errorMessage(e));}finally{this.loading.set(false);}
   }
   saveProduct(body:ProductoInput,id?:number){return firstValueFrom(id?this.http.put<Producto>('/api/productos/'+id,body):this.http.post<Producto>('/api/productos',body));}
   removeProduct(id:number){return firstValueFrom(this.http.delete('/api/productos/'+id));}
