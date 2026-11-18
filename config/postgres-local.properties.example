@@ -1,0 +1,5 @@
+# Copiar como postgres-local.properties y ajustar en cada equipo.
+# El archivo con valores reales está excluido de Git.
+spring.datasource.url=jdbc:postgresql://localhost:5432/tienda_mayenm
+spring.datasource.username=postgres
+spring.datasource.password=REEMPLAZAR_CON_CLAVE_LOCAL
