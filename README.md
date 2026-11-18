@@ -1,4 +1,22 @@
-# Tienda MAYEN - API de Gestión de Productos
+# Tienda MAYEN — aplicación web APF3
+
+Versión actual: Angular + Spring Boot + JPA + PostgreSQL. Permite gestionar productos, registrar ventas, consultar el historial y visualizar indicadores según el rol.
+
+## Empezar con la versión actual
+
+- Requiere Java 21 y PostgreSQL. Angular ya está compilado dentro de los recursos de Java.
+- Configurar `DB_URL`, `DB_USER` y `DB_PASSWORD` para la base local de cada integrante.
+- Iniciar con `.\mvnw.cmd spring-boot:run "-Dspring-boot.run.profiles=demo,postgres"` y abrir `http://localhost:8080/`.
+- Para editar Angular, usar Node 24 y seguir [la guía del frontend](frontend/README.md).
+- Consultar [el checklist APF3](APF3.md) y [la conexión PostgreSQL](CONEXION_POSTGRESQL.md).
+
+El perfil `demo` es de laboratorio. No compartir la configuración privada de conexión. Los datos de PostgreSQL no se incluyen en Git.
+
+Guías del equipo: [instalación](docs/INSTALACION_EQUIPO.md), [mapa de clases y checklist](docs/MAPA_APF3.md), [presentación](docs/GUION_PRESENTACION_APF3.md) y [solución de problemas](docs/SOLUCION_PROBLEMAS.md).
+
+## Documentación histórica del APF1
+
+Las secciones siguientes conservan la explicación de la primera entrega. Sus referencias al almacenamiento en memoria y funciones futuras corresponden al APF1, no al funcionamiento actual del APF3.
 
 La interfaz web integrada se abre en `http://localhost:8080/` después de iniciar
 `gestion`. Incluye login, catálogo, inventario, ventas e historial según el rol.
